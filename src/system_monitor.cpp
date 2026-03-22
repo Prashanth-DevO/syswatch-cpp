@@ -8,12 +8,10 @@
 SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5) {};
 bool SystemMonitor::initialize() {
     // Initialize all monitors
-    cpuMonitor.initialize();
-    memoryMonitor.initialize();
-    diskMonitor.initialize();
-    networkMonitor.initialize();
-    processMonitor.initialize();
-
+    if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize() || !networkMonitor.initialize() || !processMonitor.initialize()) {
+        return false;
+    }
+    
     loadThresholdConfig("config/thresholds.conf");
 
     printStartupSummary();
@@ -22,12 +20,55 @@ bool SystemMonitor::initialize() {
 }
 
 bool SystemMonitor::loadThresholdConfig(const std::string& filepath) {
-    thresholds["cpu"] = 80.0; 
-    thresholds["memory"] = 90.0; 
-    thresholds["disk"] = 85.0; 
-    thresholds["network"] = 1000.0; 
-    thresholds["process"] = 100.0; 
-
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open threshold config file: " << filepath << std::endl;
+        return false;
+    }
+    const std::set<std::string> valid_keys = {
+        "cpu_usage", "memory_usage", "disk_usage", "network_rx", "network_tx", "process_cpu", "process_memory"
+    };
+    int valid_count = 0;
+    std::string line;
+    while (std::getline(file, line)) {
+        // Remove comments
+        auto comment_pos = line.find('#');
+        if (comment_pos != std::string::npos) line = line.substr(0, comment_pos);
+        // Trim whitespace
+        size_t first = line.find_first_not_of(" \t\n\r");
+        if (first == std::string::npos) continue;
+        size_t last = line.find_last_not_of(" \t\n\r");
+        line = line.substr(first, last - first + 1);
+        if (line.empty()) continue;
+        auto eq_pos = line.find('=');
+        if (eq_pos == std::string::npos) continue;
+        std::string key = line.substr(0, eq_pos);
+        std::string value = line.substr(eq_pos + 1);
+        // Trim key/value
+        first = key.find_first_not_of(" \t\n\r");
+        last = key.find_last_not_of(" \t\n\r");
+        key = (first == std::string::npos) ? "" : key.substr(first, last - first + 1);
+        first = value.find_first_not_of(" \t\n\r");
+        last = value.find_last_not_of(" \t\n\r");
+        value = (first == std::string::npos) ? "" : value.substr(first, last - first + 1);
+        if (valid_keys.find(key) == valid_keys.end()) {
+            std::cerr << "Warning: Invalid threshold key '" << key << "' in config. Skipping." << std::endl;
+            continue;
+        }
+        try {
+            double val = std::stod(value);
+            thresholds[key] = val;
+            valid_count++;
+        } catch (...) {
+            std::cerr << "Warning: Invalid value for key '" << key << "' in config. Skipping." << std::endl;
+            continue;
+        }
+    }
+    file.close();
+    if (valid_count == 0) {
+        std::cerr << "No valid thresholds found in config file." << std::endl;
+        return false;
+    }
     return true;
 }
 
