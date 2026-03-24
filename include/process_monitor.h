@@ -9,4 +9,4 @@ class ProcessMonitor {
     private:
         bool isNumberDirectory(const std::string& name);
         bool readProcessMemory(int pid, double& memoryMB, std::string& processName);
-}
+};

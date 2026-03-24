@@ -12,4 +12,4 @@ class MemoryMonitor {
         unsigned long long FreeMem;
         bool isFirstRead;
         bool readMemoryStats(unsigned long long &totalMem, unsigned long long &freeMem);
-}
+};

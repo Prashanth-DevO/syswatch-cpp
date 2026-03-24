@@ -1,7 +1,7 @@
 #pragma once
 #include "utils.h"
 
-class DiskMonitor{
+class DiskMonitor {
     public:
        DiskMonitor(const std::string& mountPath = "/");
        std::vector<MetricData> collectMetrics();
@@ -11,4 +11,4 @@ class DiskMonitor{
     private:
        unsigned long long TotalBytes;
        unsigned long long freeBytes;
-}
+};

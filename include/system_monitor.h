@@ -26,11 +26,11 @@ class SystemMonitor {
 
          SystemMonitor();
          bool initialize();
-         bool loadThresholdConfig(const std::string& fliepath);
+         bool loadThresholdConfig(const std::string& filepath);
          void startMonitoring();
          void stopMonitoring();
          std::vector<MetricData> collectAllMetrics();
          void processMetrics(const std::vector<MetricData>& metrics);
          void setMonitoringInterval(int seconds);
          void printStartupSummary();
-}
+};

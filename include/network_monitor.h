@@ -1,5 +1,5 @@
 #pragma once
-#include "utils.h";
+#include "utils.h"
 
 class NetworkMonitor {
     public:
@@ -7,7 +7,7 @@ class NetworkMonitor {
         std::string interfaceName;
         bool initialize();
         bool getNetworkUsage(double& rxMbps, double& txMbps);
-        std::vector<MerticData> collectMetrics();
+        std::vector<MetricData> collectMetrics();
     private:
         unsigned long long prevRxBytes;
         unsigned long long prevTxBytes;

@@ -12,4 +12,4 @@ class CPUMonitor {
         unsigned long long prevIdleTime;
         bool isFirstRead;
         bool readCPUStats(unsigned long long &totalUser, unsigned long long &idleTime);
-}
+};

@@ -2,7 +2,7 @@
 // computing memory usage percent
 
 #include "memory_monitor.h"
-#include <ftream>
+#include <fstream>
 
 MemoryMonitor::MemoryMonitor() totalBytes(0), freeBytes(0) {};
 

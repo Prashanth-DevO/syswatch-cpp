@@ -16,4 +16,4 @@ class Logger {
       void logWarning(const std::string &warningMessage);
       void logInfo(const std::string &infoMessage);
       void close();
-}
+};
