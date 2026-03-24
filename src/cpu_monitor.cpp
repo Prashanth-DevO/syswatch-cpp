@@ -8,7 +8,7 @@
 CPUMonitor::CPUMonitor() prevTotalTime(0), prevIdlezTime(0), isFirstRead(true) {};
 
 bool CPUMonitor::initialize() {
-    std::ifstream file("/proc.stat");
+    std::ifstream file("/proc/stat");
     if(!file.is_open()) {
         return false;
     }

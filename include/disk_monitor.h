@@ -11,5 +11,4 @@ class DiskMonitor{
     private:
        unsigned long long TotalBytes;
        unsigned long long freeBytes;
-       bool readDiskStats(unsigned long long &totalRead, unsigned long long &totalWrite);
 }

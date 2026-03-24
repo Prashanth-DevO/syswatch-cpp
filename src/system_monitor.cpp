@@ -8,7 +8,7 @@
 SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5) {};
 bool SystemMonitor::initialize() {
     // Initialize all monitors
-    if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize() || !networkMonitor.initialize() || !processMonitor.initialize()) {
+    if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize() || !networkMonitor.initialize()) {
         return false;
     }
     
