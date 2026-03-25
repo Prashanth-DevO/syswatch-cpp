@@ -8,6 +8,7 @@
 #include "alert_engine.h"
 #include <map>
 #include <vector>
+#include <set>
 
 class SystemMonitor {
     public:

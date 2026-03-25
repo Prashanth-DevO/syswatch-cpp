@@ -1,3 +1,0 @@
-/home/prashanth/Smart_Monitor_System_Linux/build/CMakeFiles/syswatch-cpp.dir
-/home/prashanth/Smart_Monitor_System_Linux/build/CMakeFiles/edit_cache.dir
-/home/prashanth/Smart_Monitor_System_Linux/build/CMakeFiles/rebuild_cache.dir

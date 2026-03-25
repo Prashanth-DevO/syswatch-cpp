@@ -1,5 +1,6 @@
 #pragma once
 #include "utils.h"
+#include <vector>
 
 class MemoryMonitor {
     public:

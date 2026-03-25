@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+#include <ctime> 
 
 struct MetricData {
     std::string type;
@@ -11,4 +13,9 @@ struct Alert {
     double value;
     std::string message;
     std::time_t timestamp;
+};
+
+struct ProcessInfo {
+    std::string name;
+    double memoryMB;
 };

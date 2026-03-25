@@ -3,7 +3,8 @@
 // prints output
 // controls interval loop
 
-#include "system_monitor.h";
+#include "system_monitor.h"
+#include <iostream>
 
 SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5) {};
 bool SystemMonitor::initialize() {
