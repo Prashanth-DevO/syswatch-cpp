@@ -3,8 +3,9 @@
 
 #include "network_monitor.h"
 #include <fstream>
+#include <sstream>
 
-NetworkMonitor::NetworkMonitor(const std::string& iface="eth0") : interfaceName(iface), prevRxBytes(0), prevTxBytes(0), firstRead(true) {}
+NetworkMonitor::NetworkMonitor(const std::string& iface) : interfaceName(iface), prevRxBytes(0), prevTxBytes(0), firstRead(true) {}
 
 bool NetworkMonitor::initialize() {
     std::ifstream netDevFile("/proc/net/dev");

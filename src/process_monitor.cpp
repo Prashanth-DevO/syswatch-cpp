@@ -5,8 +5,9 @@
 
 #include "process_monitor.h"
 #include <fstream>
+#include <sstream>
 
-ProcessMonitor::ProcessMonitor();
+ProcessMonitor::ProcessMonitor() {}
 
 int ProcessMonitor::getProcessCount() {
     std::ifstream file("/proc");

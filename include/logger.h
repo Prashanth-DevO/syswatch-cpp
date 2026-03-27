@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include "utils.h"
+#include <vector>
 
 class Logger {
     public:

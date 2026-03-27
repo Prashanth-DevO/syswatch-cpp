@@ -5,6 +5,8 @@
 
 #include "system_monitor.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5) {};
 bool SystemMonitor::initialize() {

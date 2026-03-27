@@ -5,6 +5,7 @@
 #include <stdexcept> // for runtime_error
 #include <iostream> // for cerr
 #include <fstream>  // for std::ios::app
+#include <vector>
 
 Logger::Logger() : logFilePath("logs/system_monitor.log") {};
 
@@ -14,12 +15,14 @@ void Logger::log(const std::string &message) {
     }
 }
 
-void Logger::initialize() {
+bool Logger::initialize() {
     logFile.open(logFilePath, std::ios::app);
     if (!logFile) {
         throw std::runtime_error("Unable to open log file: " + logFilePath);
+        return false;
     }
     log("Logger initialized.");
+    return true;
 }
 
 void Logger::logMetric(const MetricData &metric) {

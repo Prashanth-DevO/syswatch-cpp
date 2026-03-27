@@ -3,8 +3,9 @@
 
 #include "memory_monitor.h"
 #include <fstream>
+#include <sstream>
 
-MemoryMonitor::MemoryMonitor() totalBytes(0), freeBytes(0) {};
+MemoryMonitor::MemoryMonitor() : TotalMem(0), FreeMem(0), isFirstRead(true) {}
 
 bool MemoryMonitor::initialize() {
     std::ifstream file("/proc/meminfo");
@@ -31,7 +32,7 @@ double MemoryMonitor::getMemoryUsage() {
     return memUsage;
 }
 
-vector<MetricData> MemoryMonitor::collectMetrics() {
+std::vector<MetricData> MemoryMonitor::collectMetrics() {
     double memUsage = getMemoryUsage();
     if(memUsage < 0) {
         return {};

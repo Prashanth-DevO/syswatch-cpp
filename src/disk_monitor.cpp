@@ -2,6 +2,8 @@
 
 #include "disk_monitor.h"
 #include <sys/statvfs.h>
+#include <iostream>
+#include <cstring>
 
 DiskMonitor::DiskMonitor(const std::string& mountPath) : mountPath(mountPath), TotalBytes(0), freeBytes(0) {}
 

@@ -4,8 +4,9 @@
 #include "cpu_monitor.h"
 #include <fstream>
 #include <string>
+#include <sstream>
 
-CPUMonitor::CPUMonitor() prevTotalTime(0), prevIdlezTime(0), isFirstRead(true) {};
+CPUMonitor::CPUMonitor() : prevTotalTime(0), prevIdleTime(0), isFirstRead(true) {}
 
 bool CPUMonitor::initialize() {
     std::ifstream file("/proc/stat");
@@ -15,7 +16,7 @@ bool CPUMonitor::initialize() {
     return true;
 }
 
-double CPUMonitor::getCPUsage() {
+double CPUMonitor::getCPUUsage() {
     unsigned long long totalUser, idleTime;
     if (!readCPUStats(totalUser, idleTime)) {
         return -1.0;
@@ -37,7 +38,7 @@ double CPUMonitor::getCPUsage() {
     return cpuUsage;
 }
 
-bool CPUMonitor::readCPUstats(unsigned long long &totalUser, unsigned long long &idleTime) {
+bool CPUMonitor::readCPUStats(unsigned long long &totalUser, unsigned long long &idleTime) {
     std::ifstream file("/proc/stat");
     if (!file.is_open()) {
         return false;
@@ -57,7 +58,7 @@ bool CPUMonitor::readCPUstats(unsigned long long &totalUser, unsigned long long 
     return false;
 }
 
-std::vector<MetricData> CPUMonitor::collectorMetrics() {
+std::vector<MetricData> CPUMonitor::collectMetrics() {
     std::vector<MetricData> metrics;
     double cpuUsage = getCPUUsage();
     if(cpuUsage>=0.0) {
