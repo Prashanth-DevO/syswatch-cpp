@@ -48,9 +48,11 @@ bool CPUMonitor::readCPUStats(unsigned long long &totalUser, unsigned long long 
         if (line.substr(0, 4) == "cpu ") {
             std::istringstream iss(line);
             std::string cpuLabel;
-            unsigned long long user, nice, system, idle, iowait, irq, softirq;
+            unsigned long long user, nice, system, idle, iowait, irq, softirq, steal = 0, guest = 0, guest_nice = 0;
             iss >> cpuLabel >> user >> nice >> system >> idle >> iowait >> irq >> softirq;
-            totalUser = user + nice + system + iowait + irq + softirq;
+            // Try to read optional fields if present
+            iss >> steal >> guest >> guest_nice;
+            totalUser = user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice;
             idleTime = idle + iowait;
             return true;
         }

@@ -32,7 +32,7 @@ std::vector<MetricData> DiskMonitor::collectMetrics() {
     std::vector<MetricData> metrics;
     double usage = getDiskUsage();
     if (usage >= 0) {
-        metrics.push_back({"disk_usage_percent", usage});
+        metrics.push_back({"disk_usage", usage});
     }
     return metrics;
 }

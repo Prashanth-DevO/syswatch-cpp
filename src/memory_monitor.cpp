@@ -37,7 +37,7 @@ std::vector<MetricData> MemoryMonitor::collectMetrics() {
     if(memUsage < 0) {
         return {};
     }
-    return {{"Memory Usage", memUsage}};
+    return {{"memory_usage", memUsage}};
 }
 
 bool MemoryMonitor::readMemoryStats(unsigned long long &totalMem, unsigned long long &freeMem) {
@@ -52,13 +52,13 @@ bool MemoryMonitor::readMemoryStats(unsigned long long &totalMem, unsigned long 
             std::string label;
             unsigned long long memKB;
             iss >> label >> memKB;
-            totalMem = memKB * 1024; // Convert to bytes
+            totalMem = memKB * 1024; 
         } else if(line.substr(0, 8) == "MemFree:") {
             std::istringstream iss(line);
             std::string label;
             unsigned long long memKB;
             iss >> label >> memKB;
-            freeMem = memKB * 1024; // Convert to bytes
+            freeMem = memKB * 1024; 
         }
     }
     return true;

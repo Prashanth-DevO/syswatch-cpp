@@ -8,14 +8,19 @@
 #include <thread>
 #include <chrono>
 
-SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5) {};
+SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(2) {};
 bool SystemMonitor::initialize() {
     // Initialize all monitors
     if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize() || !networkMonitor.initialize()) {
         return false;
     }
     
+
     loadThresholdConfig("config/thresholds.conf");
+    // Copy thresholds to AlertEngine
+    for (const auto& kv : thresholds) {
+        alertEngine.setThreshold(kv.first, kv.second);
+    }
 
     printStartupSummary();
 
