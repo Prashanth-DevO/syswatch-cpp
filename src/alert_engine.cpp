@@ -38,3 +38,18 @@ std::string AlertEngine::buildAlertMessage(const MetricData& metric) {
     std::string message = "ALERT: " + metric.type + " usage at " + std::to_string(metric.value) + "% exceeds threshold of " + std::to_string(thresholds[metric.type]) + "%.";
     return message;
 }  
+
+void AlertEngine::alertTopProcesses(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer) {
+    std::cout << "Top CPU consuming processes (collected in " << fromTimer << " seconds):" << std::endl;
+    for (const auto& proc : topCPUProcesses) {
+        std::cout << " - " << proc.name << ": " << proc.cpuPercent << "% CPU" << std::endl;
+    }
+}
+
+void AlertEngine::alertTopProcesses(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer) {
+    std::cout << "Top Memory consuming processes (collected in " << fromTimer << " seconds):" << std::endl;
+    for (const auto& proc : topMemoryProcesses) {
+        std::cout << " - " << proc.name << ": " << proc.memoryMB << " MB" << std::endl;
+    }
+}
+

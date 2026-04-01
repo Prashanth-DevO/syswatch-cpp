@@ -20,4 +20,6 @@ public:
     bool canTriggerAlert(const std::string& metricType);
     void updateLastAlertTime(const std::string& metricName);
     std::string buildAlertMessage(const MetricData& metric);
+    void alertTopProcesses(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer);
+    void alertTopProcesses(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer);
 };

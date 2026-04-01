@@ -109,6 +109,32 @@ void SystemMonitor::processMetrics(const std::vector<MetricData>& metrics) {
         if (metric.value > thresholds[metric.type]) {
             alertEngine.triggerAlert(metric);
             logger.log("Alert triggered for " + metric.type + ": " + std::to_string(metric.value));
+            if(metric.type == "cpu_usage" ){
+                std::vector <CPUProcessInfo> topCPUProcesses;
+                double fromTimer;
+                 if(!cpuMonitor.timer.isRunning) {
+                     cpuMonitor.timer.start();
+                 }
+                 cpuMonitor.getTopCPUProcesses(topCPUProcesses, fromTimer);
+                 alertEngine.alertTopProcesses(topCPUProcesses, fromTimer);
+            }
+            if(metric.type == "memory_usage") {
+                 std::vector <ProcessInfo> topMemoryProcesses;
+                 double fromTimer;
+                 if(!memoryMonitor.timer.isRunning) {
+                     memoryMonitor.timer.start();
+                 }
+                 memoryMonitor.getTopMemoryProcesses(topMemoryProcesses, fromTimer);
+                 alertEngine.alertTopProcesses(topMemoryProcesses, fromTimer);
+            }
+        }
+        else{
+            if(metric.type == "cpu_usage" && cpuMonitor.timer.isRunning) {
+                cpuMonitor.timer.isRunning = false;
+            }
+            if(metric.type == "memory_usage" && memoryMonitor.timer.isRunning) {
+                memoryMonitor.timer.isRunning = false;
+            }
         }
     }
 }

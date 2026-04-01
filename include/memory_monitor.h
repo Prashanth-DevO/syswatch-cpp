@@ -8,6 +8,8 @@ class MemoryMonitor {
         std::vector<MetricData> collectMetrics();
         bool initialize();
         double getMemoryUsage();
+        Timer timer;
+        void getTopMemoryProcesses();
     private:
         unsigned long long TotalMem;
         unsigned long long FreeMem;

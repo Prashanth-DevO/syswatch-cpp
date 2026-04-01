@@ -72,3 +72,8 @@ std::vector<MetricData> CPUMonitor::collectMetrics() {
     }
     return metrics;
 }
+
+void CPUMonitor::getTopCPUProcesses(std::vector<CPUProcessInfo>& topProcesses, double &fromTimer) {
+    fromTime = timer.elapsedSeconds();
+    //logic to read
+}

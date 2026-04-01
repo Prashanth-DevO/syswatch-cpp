@@ -8,6 +8,8 @@ class CPUMonitor {
         std::vector<MetricData> collectMetrics();
         bool initialize();
         double getCPUUsage();
+        Timer timer;
+        void getTopCPUProcesses();
     private:
         unsigned long long prevTotalTime;
         unsigned long long prevIdleTime;

@@ -63,3 +63,8 @@ bool MemoryMonitor::readMemoryStats(unsigned long long &totalMem, unsigned long 
     }
     return true;
 }
+
+void MemoryMonitor::getTopMemoryProcesses(std::vector<ProcessInfo>& topProcesses, double &fromTimer) {
+    fromTime = timer.elapsedSeconds();
+    //logic to read
+}
