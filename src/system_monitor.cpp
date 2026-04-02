@@ -8,14 +8,20 @@
 #include <thread>
 #include <chrono>
 
-SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(2) {};
+SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5) {};
 bool SystemMonitor::initialize() {
     // Initialize all monitors
     if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize() || !networkMonitor.initialize()) {
         return false;
     }
     
+    std::ifstream file("config/thresholds.conf");
 
+    if(!file){
+        std::cerr << "Failed to open threshold config file." << std::endl;
+        return false;
+    }
+    
     loadThresholdConfig("config/thresholds.conf");
     // Copy thresholds to AlertEngine
     for (const auto& kv : thresholds) {
@@ -105,6 +111,7 @@ void SystemMonitor::printStartupSummary() {
 }
 
 void SystemMonitor::processMetrics(const std::vector<MetricData>& metrics) {
+    alertEngine.clearTerminal();
     for (const auto& metric : metrics) {
         if (metric.value > thresholds[metric.type]) {
             alertEngine.triggerAlert(metric);

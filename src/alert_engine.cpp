@@ -6,7 +6,7 @@
 #include <iostream>
 #include <ctime>
 
-AlertEngine::AlertEngine() : alertCooldown(300) {};
+AlertEngine::AlertEngine() {};
 void AlertEngine::setThreshold(const std::string& metricType, double threshold) {
     thresholds[metricType] = threshold;
 }
@@ -17,22 +17,7 @@ bool AlertEngine::isThresholdBreached(const MetricData& metric) {
     return metric.value > thresholds[metric.type];
 }
 void AlertEngine::triggerAlert(const MetricData& metric) {
-    if (canTriggerAlert(metric.type)) {
-        std::string alertMessage = buildAlertMessage(metric);
-        std::cout << alertMessage << std::endl;
-        updateLastAlertTime(metric.type);
-    }
-}
-bool AlertEngine::canTriggerAlert(const std::string& metricType) {
-    auto now = std::time(nullptr);
-    if (lastAlertTimes.find(metricType) == lastAlertTimes.end() ||
-        difftime(now, lastAlertTimes[metricType]) >= alertCooldown) {
-        return true;
-    }
-    return false;
-}
-void AlertEngine::updateLastAlertTime(const std::string& metricType) {
-    lastAlertTimes[metricType] = std::time(nullptr);
+    std::cout << buildAlertMessage(metric) << std::endl;
 }
 std::string AlertEngine::buildAlertMessage(const MetricData& metric) {
     std::string message = "ALERT: " + metric.type + " usage at " + std::to_string(metric.value) + "% exceeds threshold of " + std::to_string(thresholds[metric.type]) + "%.";
@@ -53,3 +38,6 @@ void AlertEngine::alertTopProcesses(const std::vector<ProcessInfo>& topMemoryPro
     }
 }
 
+void AlertEngine::clearTerminal() {
+    std::cout << "\033[H\033[2J\033[3J" << std::flush;
+}
