@@ -9,7 +9,7 @@ class CPUMonitor {
         bool initialize();
         double getCPUUsage();
         Timer timer;
-        void getTopCPUProcesses();
+        void getTopCPUProcesses(std::vector<CPUProcessInfo>& topProcesses, double& fromTimer);
     private:
         unsigned long long prevTotalTime;
         unsigned long long prevIdleTime;

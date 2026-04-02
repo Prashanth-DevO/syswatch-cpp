@@ -9,7 +9,7 @@ class MemoryMonitor {
         bool initialize();
         double getMemoryUsage();
         Timer timer;
-        void getTopMemoryProcesses();
+        void getTopMemoryProcesses(std::vector<ProcessInfo>& topProcesses, double& fromTimer);
     private:
         unsigned long long TotalMem;
         unsigned long long FreeMem;

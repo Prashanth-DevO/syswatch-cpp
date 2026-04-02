@@ -38,4 +38,4 @@ struct Timer {
     double elapsedSeconds() {
         return difftime(std::time(nullptr) , startTime);
     }
-}
+};
