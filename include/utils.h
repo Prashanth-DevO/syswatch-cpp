@@ -2,6 +2,8 @@
 #include <string>
 #include <ctime> 
 
+inline constexpr char symbols[] = {'|', '/', '-', '\\'};
+
 struct MetricData {
     std::string type;
     double value;

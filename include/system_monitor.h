@@ -9,6 +9,8 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <atomic>
+#include <thread>
 
 class SystemMonitor {
     public:
@@ -24,8 +26,12 @@ class SystemMonitor {
          std::map<std::string, double> thresholds;
          bool isRunning;
          int intervalSeconds;
+         int loadIndex;
+         std::atomic<bool> loaderRunning;
+         std::thread loaderThread;
 
          SystemMonitor();
+         ~SystemMonitor();
          bool initialize();
          bool loadThresholdConfig(const std::string& filepath);
          void startMonitoring();
@@ -34,4 +40,7 @@ class SystemMonitor {
          void processMetrics(const std::vector<MetricData>& metrics);
          void setMonitoringInterval(int seconds);
          void printStartupSummary();
+    private:
+         void startLoader();
+         void stopLoader();
 };

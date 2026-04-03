@@ -8,13 +8,47 @@
 #include <thread>
 #include <chrono>
 
-SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5) {};
+SystemMonitor::SystemMonitor() :isRunning(false), intervalSeconds(5), loadIndex(0), loaderRunning(false) {};
+
+SystemMonitor::~SystemMonitor() {
+    stopLoader();
+}
+
+void SystemMonitor::startLoader() {
+    if (loaderRunning) {
+        return;
+    }
+    loaderRunning = true;
+    loaderThread = std::thread([this]() {
+        while (loaderRunning) {
+            loadIndex = (loadIndex + 1) % 4;
+            alertEngine.clearTerminal();
+            alertEngine.printLoading(symbols[loadIndex]);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    });
+}
+
+void SystemMonitor::stopLoader() {
+    if (!loaderRunning) {
+        if (loaderThread.joinable()) {
+            loaderThread.join();
+        }
+        return;
+    }
+
+    loaderRunning = false;
+    if (loaderThread.joinable()) {
+        loaderThread.join();
+    }
+    std::cout << "\r                  \r" << std::flush;
+}
+
 bool SystemMonitor::initialize() {
     // Initialize all monitors
     if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize() || !networkMonitor.initialize()) {
         return false;
     }
-    
     std::ifstream file("config/thresholds.conf");
 
     if(!file){
@@ -89,14 +123,22 @@ bool SystemMonitor::loadThresholdConfig(const std::string& filepath) {
 void SystemMonitor::startMonitoring() {
     isRunning = true;
     while (isRunning) {
+        alertEngine.clearTerminal();
+        startLoader();
         auto metrics = collectAllMetrics();
         processMetrics(metrics);
-        std::this_thread::sleep_for(std::chrono::seconds(intervalSeconds));
+
+        for (int second = 0; second < intervalSeconds && isRunning; ++second) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+
+        stopLoader();
     }
 }
 
 void SystemMonitor::stopMonitoring() {
     isRunning = false;
+    stopLoader();
 }
 
 void SystemMonitor::setMonitoringInterval(int seconds) {
@@ -111,9 +153,14 @@ void SystemMonitor::printStartupSummary() {
 }
 
 void SystemMonitor::processMetrics(const std::vector<MetricData>& metrics) {
-    alertEngine.clearTerminal();
+    bool hasAlert = false;
     for (const auto& metric : metrics) {
         if (metric.value > thresholds[metric.type]) {
+            if (!hasAlert) {
+                stopLoader();
+                alertEngine.clearTerminal();
+                hasAlert = true;
+            }
             alertEngine.triggerAlert(metric);
             logger.log("Alert triggered for " + metric.type + ": " + std::to_string(metric.value));
             if(metric.type == "cpu_usage" ){

@@ -29,7 +29,7 @@ std::vector<MetricData> ProcessMonitor::collectMetrics() {
     std::vector<MetricData> metrics;
     int processCount = getProcessCount();
     if (processCount >= 0) {
-        metrics.push_back({"Process Count", static_cast<double>(processCount)});
+        metrics.push_back({"process_count", static_cast<double>(processCount), std::time(nullptr)});
     }
     return metrics;
 }

@@ -19,4 +19,5 @@ public:
     void alertTopProcesses(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer);
     void alertTopProcesses(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer);
     void clearTerminal();
+    void printLoading(char symbol);
 };

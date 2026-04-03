@@ -41,3 +41,7 @@ void AlertEngine::alertTopProcesses(const std::vector<ProcessInfo>& topMemoryPro
 void AlertEngine::clearTerminal() {
     std::cout << "\033[H\033[2J\033[3J" << std::flush;
 }
+
+void AlertEngine::printLoading(char symbol) {
+    std::cout << " Running..." << symbol << std::flush;
+}
