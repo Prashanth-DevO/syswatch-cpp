@@ -5,6 +5,7 @@
 #include "alert_engine.h"
 #include <iostream>
 #include <ctime>
+#include <fstream>
 
 AlertEngine::AlertEngine() {};
 void AlertEngine::setThreshold(const std::string& metricType, double threshold) {
@@ -25,6 +26,7 @@ std::string AlertEngine::buildAlertMessage(const MetricData& metric) {
 }  
 
 void AlertEngine::alertTopProcesses(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer) {
+    writeToCPUAlertLog(topCPUProcesses, fromTimer);
     std::cout << "Top CPU consuming processes (collected in " << fromTimer << " seconds):" << std::endl;
     for (const auto& proc : topCPUProcesses) {
         std::cout << " - " << proc.name << ": " << proc.cpuPercent << "% CPU" << std::endl;
@@ -32,6 +34,7 @@ void AlertEngine::alertTopProcesses(const std::vector<CPUProcessInfo>& topCPUPro
 }
 
 void AlertEngine::alertTopProcesses(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer) {
+    writeToMemoryAlertLog(topMemoryProcesses, fromTimer);
     std::cout << "Top Memory consuming processes (collected in " << fromTimer << " seconds):" << std::endl;
     for (const auto& proc : topMemoryProcesses) {
         std::cout << " - " << proc.name << ": " << proc.memoryMB << " MB" << std::endl;
@@ -44,4 +47,26 @@ void AlertEngine::clearTerminal() {
 
 void AlertEngine::printLoading(char symbol) {
     std::cout << " Running..." << symbol << std::flush;
+}
+
+void AlertEngine::writeToCPUAlertLog(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer) {
+    std::ofstream logFile("logs/cpu_alerts.log", std::ios::app);
+    if(logFile.is_open()) {
+        logFile << "CPU Alert at " << std::time(nullptr) << " (collected in " << fromTimer << " seconds):" << std::endl;
+        for (const auto& proc : topCPUProcesses) {
+            logFile << " - " << proc.name << ": " << proc.cpuPercent << "% CPU" << std::endl;
+        }
+        logFile.close();
+    }
+}
+
+void AlertEngine::writeToMemoryAlertLog(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer) {
+    std::ofstream logFile("logs/memory_alerts.log", std::ios::app);
+    if(logFile.is_open()) {
+        logFile << "Memory Alert at " << std::time(nullptr) << " (collected in " << fromTimer << " seconds):" << std::endl;
+        for (const auto& proc : topMemoryProcesses) {
+            logFile << " - " << proc.name << ": " << proc.memoryMB << " MB" << std::endl;
+        }
+        logFile.close();
+    }
 }

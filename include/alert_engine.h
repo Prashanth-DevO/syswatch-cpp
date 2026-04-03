@@ -20,4 +20,6 @@ public:
     void alertTopProcesses(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer);
     void clearTerminal();
     void printLoading(char symbol);
+    void writeToCPUAlertLog(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer);
+    void writeToMemoryAlertLog(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer);
 };
