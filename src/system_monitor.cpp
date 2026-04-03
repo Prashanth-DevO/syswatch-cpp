@@ -46,7 +46,7 @@ void SystemMonitor::stopLoader() {
 
 bool SystemMonitor::initialize() {
     // Initialize all monitors
-    if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize() || !networkMonitor.initialize()) {
+    if(!cpuMonitor.initialize() || !memoryMonitor.initialize() || !diskMonitor.initialize()) {
         return false;
     }
     std::ifstream file("config/thresholds.conf");
@@ -74,7 +74,7 @@ bool SystemMonitor::loadThresholdConfig(const std::string& filepath) {
         return false;
     }
     const std::set<std::string> valid_keys = {
-        "cpu_usage", "memory_usage", "disk_usage", "network_rx", "network_tx", "process_cpu", "process_memory"
+        "cpu_usage", "memory_usage", "disk_usage", "process_cpu", "process_memory"
     };
     int valid_count = 0;
     std::string line;
@@ -161,9 +161,12 @@ void SystemMonitor::processMetrics(const std::vector<MetricData>& metrics) {
                 alertEngine.clearTerminal();
                 hasAlert = true;
             }
-            alertEngine.triggerAlert(metric);
-            logger.log("Alert triggered for " + metric.type + ": " + std::to_string(metric.value));
+            if(metric.type == "disk_usage" && !diskMonitor.printed) {
+                diskMonitor.printed = true;
+                alertEngine.triggerAlert(metric);
+            }
             if(metric.type == "cpu_usage" ){
+                alertEngine.triggerAlert(metric);
                 std::vector <CPUProcessInfo> topCPUProcesses;
                 double fromTimer;
                  if(!cpuMonitor.timer.isRunning) {
@@ -173,6 +176,7 @@ void SystemMonitor::processMetrics(const std::vector<MetricData>& metrics) {
                  alertEngine.alertTopProcesses(topCPUProcesses, fromTimer);
             }
             if(metric.type == "memory_usage") {
+                alertEngine.triggerAlert(metric);
                  std::vector <ProcessInfo> topMemoryProcesses;
                  double fromTimer;
                  if(!memoryMonitor.timer.isRunning) {
@@ -198,13 +202,11 @@ std::vector<MetricData> SystemMonitor::collectAllMetrics(){
     auto cpuData = cpuMonitor.collectMetrics();
     auto memoryData = memoryMonitor.collectMetrics();
     auto diskData = diskMonitor.collectMetrics();
-    auto networkData = networkMonitor.collectMetrics();
     auto processData = processMonitor.collectMetrics();
 
     metrics.insert(metrics.end(), cpuData.begin(), cpuData.end());
     metrics.insert(metrics.end(), memoryData.begin(), memoryData.end());
     metrics.insert(metrics.end(), diskData.begin(), diskData.end());
-    metrics.insert(metrics.end(), networkData.begin(), networkData.end());
     metrics.insert(metrics.end(), processData.begin(), processData.end());
 
     return metrics;

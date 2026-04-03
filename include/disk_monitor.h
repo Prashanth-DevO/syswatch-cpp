@@ -9,6 +9,7 @@ class DiskMonitor{
        bool initialize();
        double getDiskUsage();
        std::string mountPath;
+       bool printed;
     private:
        unsigned long long TotalBytes;
        unsigned long long freeBytes;

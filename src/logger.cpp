@@ -47,6 +47,26 @@ void Logger::logInfo(const std::string &infoMessage) {
     log("INFO: " + infoMessage);
 }
 
+void Logger::writeToCPUAlertLog(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer) {
+    std::ofstream cpuAlertFile("logs/cpu_alerts.log", std::ios::app);
+    if (cpuAlertFile.is_open()) {
+        cpuAlertFile << "CPU Alert at " << std::time(nullptr) << " (collected in " << fromTimer << " seconds):" << std::endl;
+        for (const auto& proc : topCPUProcesses) {
+            cpuAlertFile << " - " << proc.name << ": " << proc.cpuPercent << "% CPU" << std::endl;
+        }
+    }
+}
+
+void Logger::writeToMemoryAlertLog(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer) {
+    std::ofstream memoryAlertFile("logs/memory_alerts.log", std::ios::app);
+    if (memoryAlertFile.is_open()) {
+        memoryAlertFile << "Memory Alert at " << std::time(nullptr) << " (collected in " << fromTimer << " seconds):" << std::endl;
+        for (const auto& proc : topMemoryProcesses) {
+            memoryAlertFile << " - " << proc.name << ": " << proc.memoryMB << " MB" << std::endl;
+        }
+    }
+}
+
 void Logger::close() {
     if (logFile.is_open()) {
         log("Logger shutting down.");

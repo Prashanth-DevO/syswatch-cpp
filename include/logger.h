@@ -17,5 +17,7 @@ class Logger {
       void logError(const std::string &errorMessage);
       void logWarning(const std::string &warningMessage);
       void logInfo(const std::string &infoMessage);
+      void writeToCPUAlertLog(const std::vector<CPUProcessInfo>& topCPUProcesses, double fromTimer);
+      void writeToMemoryAlertLog(const std::vector<ProcessInfo>& topMemoryProcesses, double fromTimer);
       void close();
 };

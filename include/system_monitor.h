@@ -2,7 +2,6 @@
 #include "cpu_monitor.h"
 #include "memory_monitor.h"
 #include "disk_monitor.h"
-#include "network_monitor.h"
 #include "process_monitor.h"
 #include "logger.h"
 #include "alert_engine.h"
@@ -17,7 +16,6 @@ class SystemMonitor {
         CPUMonitor cpuMonitor;
         MemoryMonitor memoryMonitor;
         DiskMonitor diskMonitor;
-        NetworkMonitor networkMonitor;
         ProcessMonitor processMonitor;
 
         //support objects

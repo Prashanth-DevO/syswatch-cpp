@@ -10,7 +10,6 @@ add_executable(syswatch-cpp
     src/cpu_monitor.cpp
     src/memory_monitor.cpp
     src/disk_monitor.cpp
-    src/network_monitor.cpp
     src/logger.cpp
     src/alert_engine.cpp
     src/process_monitor.cpp

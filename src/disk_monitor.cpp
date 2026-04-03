@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cstring>
 
-DiskMonitor::DiskMonitor(const std::string& mountPath) : mountPath(mountPath), TotalBytes(0), freeBytes(0) {}
+DiskMonitor::DiskMonitor(const std::string& mountPath) : mountPath(mountPath), TotalBytes(0), freeBytes(0) , printed(false) {}
 
 bool DiskMonitor::initialize() {
     struct statvfs stat;
