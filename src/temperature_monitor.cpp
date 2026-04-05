@@ -11,7 +11,6 @@ bool TemperatureMonitor::initialize() {
 
 void TemperatureMonitor::readTemperatureStats(std::vector<MetricData>& metrics) {
    std::string path = "sys/class/thermal/";
-   int index = 0;
    for(const auto& entry : fs::directory_iterator(path)) {
         if (entry.is_directory() && entry.path().filename().string().find("thermal_zone") == 0) {
             std::ifstream tempFile(entry.path() / "temp");
@@ -20,7 +19,7 @@ void TemperatureMonitor::readTemperatureStats(std::vector<MetricData>& metrics) 
                 tempFile >> tempValue;
                 tempValue /= 1000.0; // Convert from millidegrees to degrees
                 MetricData data;
-                data.type = "temperature" + std::to_string(index++);
+                data.type = "temperature";
                 data.value = tempValue;
                 data.timestamp = std::time(nullptr);
                 metrics.push_back(data);

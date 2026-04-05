@@ -161,29 +161,41 @@ void SystemMonitor::processMetrics(const std::vector<MetricData>& metrics) {
                 alertEngine.clearTerminal();
                 hasAlert = true;
             }
-            if(metric.type == "disk_usage" && !diskMonitor.printed) {
-                diskMonitor.printed = true;
-                alertEngine.triggerAlert(metric);
-            }
-            if(metric.type == "cpu_usage" ){
-                alertEngine.triggerAlert(metric);
-                std::vector <CPUProcessInfo> topCPUProcesses;
-                double fromTimer;
-                 if(!cpuMonitor.timer.isRunning) {
-                     cpuMonitor.timer.start();
-                 }
-                 cpuMonitor.getTopCPUProcesses(topCPUProcesses, fromTimer);
-                 alertEngine.alertTopProcesses(topCPUProcesses, fromTimer);
-            }
-            if(metric.type == "memory_usage") {
-                alertEngine.triggerAlert(metric);
-                 std::vector <ProcessInfo> topMemoryProcesses;
-                 double fromTimer;
-                 if(!memoryMonitor.timer.isRunning) {
-                     memoryMonitor.timer.start();
-                 }
-                 memoryMonitor.getTopMemoryProcesses(topMemoryProcesses, fromTimer);
-                 alertEngine.alertTopProcesses(topMemoryProcesses, fromTimer);
+            switch (metric.type) {
+                case "cpu_usage":
+                    alertEngine.triggerAlert(metric);
+                    {
+                        std::vector <CPUProcessInfo> topCPUProcesses;
+                        double fromTimer;
+                        if(!cpuMonitor.timer.isRunning) {
+                            cpuMonitor.timer.start();
+                        }
+                        cpuMonitor.getTopCPUProcesses(topCPUProcesses, fromTimer);
+                        alertEngine.alertTopProcesses(topCPUProcesses, fromTimer);
+                    }
+                    break;
+                case "memory_usage":
+                    alertEngine.triggerAlert(metric);
+                    {
+                        std::vector <ProcessInfo> topMemoryProcesses;
+                        double fromTimer;
+                        if(!memoryMonitor.timer.isRunning) {
+                            memoryMonitor.timer.start();
+                        }
+                        memoryMonitor.getTopMemoryProcesses(topMemoryProcesses, fromTimer);
+                        alertEngine.alertTopProcesses(topMemoryProcesses, fromTimer);
+                    }
+                    break;
+                case "disk_usage":
+                    alertEngine.triggerAlert(metric);
+                    diskMonitor.printed = true;
+                    break;
+                case "temperature":
+                    alertEngine.triggerAlert(metric);
+                    break;
+                default:
+                    alertEngine.triggerAlert(metric);
+                    break;
             }
         }
         else{
@@ -202,11 +214,14 @@ std::vector<MetricData> SystemMonitor::collectAllMetrics(){
     auto cpuData = cpuMonitor.collectMetrics();
     auto memoryData = memoryMonitor.collectMetrics();
     auto diskData = diskMonitor.collectMetrics();
+    auto temperatureData = temperatureMonitor.collectorMEtrics();
     auto processData = processMonitor.collectMetrics();
+
 
     metrics.insert(metrics.end(), cpuData.begin(), cpuData.end());
     metrics.insert(metrics.end(), memoryData.begin(), memoryData.end());
     metrics.insert(metrics.end(), diskData.begin(), diskData.end());
+    metrics.insert(metrics.end(), temperatureData.begin(), temperatureData.end());
     metrics.insert(metrics.end(), processData.begin(), processData.end());
 
     return metrics;
