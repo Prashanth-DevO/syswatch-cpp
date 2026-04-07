@@ -14,6 +14,7 @@ add_executable(syswatch-cpp
     src/alert_engine.cpp
     src/process_monitor.cpp
     src/utils.cpp
+    src/temperature_monitor.cpp
 )
 
 target_include_directories(syswatch-cpp PRIVATE include)

@@ -1,10 +1,11 @@
 #pragma once
 #include "utils.h"
+#include <vector>
 
-class TempratureMonitor {
+class TemperatureMonitor {
      public:
-        TemperatueMonitor();
-        std:: vector<MetricData> collectorMEtrics();
+        TemperatureMonitor();
+        std::vector<MetricData> collectMetrics();
         bool initialize();
     private:
         void readTemperatureStats(std::vector<MetricData>& metrics);

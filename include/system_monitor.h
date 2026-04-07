@@ -3,6 +3,7 @@
 #include "memory_monitor.h"
 #include "disk_monitor.h"
 #include "process_monitor.h"
+#include "temperature_monitor.h"
 #include "logger.h"
 #include "alert_engine.h"
 #include <map>
@@ -17,6 +18,7 @@ class SystemMonitor {
         MemoryMonitor memoryMonitor;
         DiskMonitor diskMonitor;
         ProcessMonitor processMonitor;
+        TemperatureMonitor temperatureMonitor;
 
         //support objects
          Logger logger;
