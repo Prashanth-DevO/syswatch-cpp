@@ -74,7 +74,7 @@ bool SystemMonitor::loadThresholdConfig(const std::string& filepath) {
         return false;
     }
     const std::set<std::string> valid_keys = {
-        "cpu_usage", "memory_usage", "disk_usage", "process_cpu", "process_memory"
+        "cpu_usage", "memory_usage", "disk_usage", "process_cpu", "process_memory", "temperature"
     };
     int valid_count = 0;
     std::string line;

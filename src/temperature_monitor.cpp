@@ -5,13 +5,14 @@
 TemperatureMonitor::TemperatureMonitor() {};
 
 bool TemperatureMonitor::initialize() {
-    std::string path = "sys/class/thermal/";
-    if(!std::filesystem::exists(path)) return false;
+    std::string path = "/sys/class/thermal/";
+    if(!std::filesystem::exists(path)||!std::filesystem::is_directory(path)) return false;
     return true;
 }
 
+
 void TemperatureMonitor::readTemperatureStats(std::vector<MetricData>& metrics) {
-   std::string path = "sys/class/thermal/";
+   std::string path = "/sys/class/thermal/";
    for(const auto& entry : std::filesystem::directory_iterator(path)) {
         if (entry.is_directory() && entry.path().filename().string().find("thermal_zone") == 0) {
             std::ifstream tempFile(entry.path() / "temp");
